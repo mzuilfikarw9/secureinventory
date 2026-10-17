@@ -1,0 +1,16 @@
+# Gitleaks configuration: default rules plus exclusions for local,
+# generated files that are never committed.
+title = "SecureInventory Gitleaks config"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Local environments, caches and scan reports"
+paths = [
+    '''(^|/)\.venv/''',
+    '''(^|/)venv/''',
+    '''(^|/)\.pytest_cache/''',
+    '''(^|/)__pycache__/''',
+    '''(^|/)reports/gitleaks/''',
+]

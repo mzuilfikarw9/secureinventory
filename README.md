@@ -77,3 +77,33 @@ Stop the container (products are lost, as they are kept in memory):
 ```bash
 docker stop secureinventory
 ```
+
+## Secret scanning
+
+Scan the Git history (all branches) and the working tree with
+[Gitleaks](https://github.com/gitleaks/gitleaks) using its default rules.
+Requires Docker; the pinned Gitleaks image runs with the repository mounted
+read-only and no network access.
+
+```bash
+./scripts/secret-scan.sh
+```
+
+| Exit code | Meaning |
+|---|---|
+| 0 | No findings |
+| 1 | Potential secrets found |
+| 2 | Scan error |
+
+Secret values are redacted in the output. JSON reports are written to
+`reports/gitleaks/` (ignored by Git). Rule settings are in `.gitleaks.toml`.
+
+Handling findings:
+
+- **Real secret:** treat it as compromised. Revoke or rotate it first, then
+  remove it from the code and load it from the environment or a secret
+  manager. Rewriting Git history does not make a pushed secret safe again.
+- **False positive:** confirm it without copying the value anywhere, then
+  suppress only that finding, either by adding its `Fingerprint` from the
+  report to `.gitleaksignore` with a comment, or with a `gitleaks:allow`
+  comment on the line. Do not disable rules or exclude whole directories.
