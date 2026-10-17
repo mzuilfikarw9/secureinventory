@@ -32,7 +32,7 @@ pipeline {
                     osv-scanner scan source \
                         --lockfile requirements.txt:requirements.lock
                     osv-scanner scan source \
-                        --lockfile requirements-dev.txt:requirements-dev.lock
+                        --lockfile requirements.txt:requirements-dev.lock
                 '''
             }
         }
