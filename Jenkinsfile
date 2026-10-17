@@ -52,7 +52,7 @@ pipeline {
                 '''
             }
         }
-    }
+    
 
     stage('Container Build') {
     steps {
@@ -60,8 +60,8 @@ pipeline {
             set -eu
             docker build -t secureinventory:${BUILD_NUMBER} .
         '''
-    }
-}
+            }
+        }  
 
 
    stage('Container Scan') {
