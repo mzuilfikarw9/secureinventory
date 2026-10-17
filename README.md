@@ -41,3 +41,39 @@ curl http://127.0.0.1:8000/products
 ```bash
 pytest
 ```
+
+## Docker
+
+Build the image and run it as a non-root user:
+
+```bash
+docker build -t secureinventory:local .
+docker run --rm -d --name secureinventory -p 8000:8000 secureinventory:local
+```
+
+Verify the running container:
+
+```bash
+docker exec secureinventory id
+# uid=10001(app) gid=... groups=...
+
+curl -i http://127.0.0.1:8000/health
+# 200 {"status":"ok"}
+
+curl -i http://127.0.0.1:8000/products
+# 200 []
+
+curl -i -X POST http://127.0.0.1:8000/products \
+  -H "Content-Type: application/json" \
+  -d '{"id": 1, "name": "Widget", "quantity": 10, "price": "9.99"}'
+# 201 (repeating the same request returns 409)
+
+curl -i http://127.0.0.1:8000/products
+# 200 [{"id":1,"name":"Widget","quantity":10,"price":"9.99"}]
+```
+
+Stop the container (products are lost, as they are kept in memory):
+
+```bash
+docker stop secureinventory
+```

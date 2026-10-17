@@ -1,0 +1,22 @@
+# Version control
+.git
+.gitignore
+
+# Virtual environments
+.venv
+venv
+
+# Python and test caches
+.pytest_cache
+**/__pycache__
+**/*.py[cod]
+
+# Environment files
+.env
+.env.*
+
+# Not needed in the runtime image
+tests
+requirements-dev.txt
+Dockerfile
+.dockerignore
