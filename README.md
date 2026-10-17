@@ -107,3 +107,35 @@ Handling findings:
   suppress only that finding, either by adding its `Fingerprint` from the
   report to `.gitleaksignore` with a comment, or with a `gitleaks:allow`
   comment on the line. Do not disable rules or exclude whole directories.
+
+## Code quality (SonarQube)
+
+Static analysis uses SonarQube Community Build. Settings are in
+`sonar-project.properties`: `app/` and the `Dockerfile` are analysed as
+sources and `tests/` as test code.
+
+Generate the coverage report before every analysis (SonarQube imports it but
+does not run tests):
+
+```bash
+pytest --cov --cov-report=xml:reports/coverage/coverage.xml
+```
+
+Run the scanner against a SonarQube server, passing the server URL and an
+analysis token through the environment. Never commit the token.
+
+```bash
+docker run --rm -e SONAR_HOST_URL -e SONAR_TOKEN -v "$PWD:/usr/src" \
+  sonarsource/sonar-scanner-cli:12.2.0.4256_8.1.0@sha256:a3f4215076706c95a17a68c19322ee916e40a3acd081a8c1a1e839e0194afa57 \
+  -Dsonar.qualitygate.wait=true
+```
+
+For a SonarQube server running locally on a Mac with Docker Desktop, set
+`SONAR_HOST_URL=http://host.docker.internal:9000`. Inside the scanner
+container, `localhost` refers to the container itself; `host.docker.internal`
+reaches the Mac. This assumes the SonarQube server publishes port 9000 to the
+host (for example `docker run -p 9000:9000 ...`).
+
+`-Dsonar.qualitygate.wait=true` makes the scanner exit non-zero when the
+Quality Gate fails. Community Build analyses a single branch, so run it on
+`main` after merging; it does not analyse feature branches or pull requests.

@@ -1,0 +1,5 @@
+[run]
+source_pkgs = app
+branch = true
+# Relative paths let SonarScanner match the report to sources wherever it runs.
+relative_files = true
