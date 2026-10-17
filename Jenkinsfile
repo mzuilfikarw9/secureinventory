@@ -26,6 +26,20 @@ pipeline {
             }
         }
 
+       
+        
+        stage('SCA Scan') {
+            steps {
+                sh '''
+                    set -eu
+                    osv-scanner scan source \
+                        --lockfile requirements.txt:requirements.lock
+                    osv-scanner scan source \
+                        --lockfile requirements.txt:requirements-dev.lock
+                '''
+            }
+        }
+       
 
         stage('Unit Tests') {
             steps {
