@@ -12,3 +12,6 @@ __pycache__/
 # Environment files
 .env
 .env.*
+
+# Secret scan reports
+reports/
