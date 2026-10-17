@@ -64,7 +64,7 @@ pipeline {
                     set -eu
                     trivy image \
                         --scanners vuln \
-                        --severity CRITICAL \
+                        --severity HIGH,CRITICAL \
                         --exit-code 1 \
                         secureinventory:${BUILD_NUMBER}
                 '''
