@@ -15,3 +15,7 @@ __pycache__/
 
 # Secret scan reports
 reports/
+
+# Coverage and SonarScanner working files
+.coverage
+.scannerwork/
