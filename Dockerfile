@@ -1,5 +1,9 @@
 FROM python:3.14.4-slim
 
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && rm -rf /var/lib/apt/lists/
+
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
@@ -10,7 +14,8 @@ WORKDIR /app
 RUN useradd --system --uid 10001 --no-create-home --shell /usr/sbin/nologin app
 
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN python -m pip install --no-cache-dir --upgrade "pip>=26.2.0" \
+    && python -m pip install --no-cache-dir -r requirements.txt
 
 COPY app/ ./app/
 
