@@ -58,20 +58,28 @@ pipeline {
             }
         }
 
+        
         stage('Container Scan') {
             steps {
                 sh '''
                     set -eu
+
+                    echo "=== Report High and Critical ==="
                     trivy image \
-                        --scanners vuln \
-                        --severity HIGH,CRITICAL \
-                        --exit-code 1 \
-                        --ignore-unfixed \
-                        secureinventory:${BUILD_NUMBER}
+                    --scanners vuln \
+                    --severity HIGH,CRITICAL \
+                    secureinventory:${BUILD_NUMBER}
+
+                    echo "=== Enforce Critical Policy ==="
+                    trivy image \
+                    --scanners vuln \
+                    --severity CRITICAL \
+                    --exit-code 1 \
+                    secureinventory:${BUILD_NUMBER}
                 '''
-            }
+             }
         }
-    }
+
 
     post {
         always {
