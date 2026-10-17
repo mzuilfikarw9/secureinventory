@@ -54,28 +54,28 @@ pipeline {
         }
     
 
-    stage('Container Build') {
-    steps {
-        sh '''
-            set -eu
-            docker build -t secureinventory:${BUILD_NUMBER} .
+        stage('Container Build') {
+            steps {
+                sh '''
+                    set -eu
+                    docker build -t secureinventory:${BUILD_NUMBER} .
         '''
             }
         }  
 
 
-   stage('Container Scan') {
-    steps {
-        sh '''
-            set -eu
-            trivy image \
-                --scanners vuln \
-                --severity CRITICAL \
-                --exit-code 1 \
-                secureinventory:${BUILD_NUMBER}
+        stage('Container Scan') {
+           steps {
+                sh '''
+                    set -eu
+                    trivy image \
+                    --scanners vuln \
+                    --severity CRITICAL \
+                    --exit-code 1 \
+                    secureinventory:${BUILD_NUMBER}
         '''
-    }
-}
+            }
+        }
 
     post {
         always {
