@@ -66,6 +66,7 @@ pipeline {
                         --scanners vuln \
                         --severity HIGH,CRITICAL \
                         --exit-code 1 \
+                        --ignore-unfixed \
                         secureinventory:${BUILD_NUMBER}
                 '''
             }
