@@ -12,6 +12,20 @@ pipeline {
                 checkout scm
             }
         }
+      
+        
+        stage('Secret Scan') {
+            steps {
+                sh '''
+                    set -eu
+                    gitleaks detect \
+                        --source . \
+                        --redact \
+                        --exit-code 1
+                '''
+            }
+        }
+
 
         stage('Unit Tests') {
             steps {
