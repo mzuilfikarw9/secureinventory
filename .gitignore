@@ -19,3 +19,12 @@ reports/
 # Coverage and SonarScanner working files
 .coverage
 .scannerwork/
+
+# Terraform working files, state and variable values
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+tfplan
+crash.log
